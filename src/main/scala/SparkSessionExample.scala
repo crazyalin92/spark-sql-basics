@@ -3,7 +3,7 @@ import org.apache.spark.sql.SparkSession
 object SparkSessionExample {
 
   def main(args: Array[String]): Unit = {
-    val jsonFile = args(0);
+    val jsonFile = args(0)
 
     //Initialize SparkSession
     val sparkSession = SparkSession
@@ -16,10 +16,10 @@ object SparkSessionExample {
     val employeeDF = sparkSession.read.json(jsonFile)
 
     //Show the first 100 rows
-    employeeDF.show(100);
+    employeeDF.show(100)
 
     //Show thw scheme of DF
-    employeeDF.printSchema();
+    employeeDF.printSchema()
 
     //Select only the "name" column
     employeeDF.select("name").show()
@@ -29,5 +29,10 @@ object SparkSessionExample {
 
     // Count people by age
     employeeDF.groupBy("age").count().show()
+
+    // Register the DataFrame as a SQL temporary view
+    employeeDF.createOrReplaceTempView("employee")
+
+    sparkSession.sql("select * from employee where age > 21").show()
   }
 }
